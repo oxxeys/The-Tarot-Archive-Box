@@ -4,7 +4,7 @@
 #include <ESPmDNS.h>
 
 const char *ssid = "VM6281628";
-const char *password = "";
+const char *password = "fpepastn3tfsnGna";
 
 WebServer server(80);
 
