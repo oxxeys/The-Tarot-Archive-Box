@@ -125,9 +125,9 @@ void sendEvent() {
 
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("WiFi OK");
-
+// https://webhook.site/9481ee50-bb48-4464-a1cb-9a8699894ac3
     HTTPClient http;
-    http.begin("https://webhook.site/9481ee50-bb48-4464-a1cb-9a8699894ac3");
+    http.begin("https://the-tarot-archive-box.onrender.com/data");
     http.addHeader("Content-Type", "application/json");
 
     String json = R"({
@@ -139,6 +139,11 @@ void sendEvent() {
 
     Serial.print("Response: ");
     Serial.println(httpResponseCode);
+
+    if (httpResponseCode == -11){
+      delay(5000);
+      httpResponseCode = http.POST(json);
+    }
 
     http.end();
   } else {
