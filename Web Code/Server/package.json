@@ -7,12 +7,17 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "dependencies": {
+    "cookie": "^1.1.1",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.4.1"
+    "express-session": "^1.19.0",
+    "mongoose": "^9.4.1",
+    "parser": "^0.1.4"
   }
 }
