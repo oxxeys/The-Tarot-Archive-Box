@@ -24,3 +24,9 @@ async function checkUser(username, password){
         return false
     }
 }
+
+
+module.exports={
+    checkUser,
+  
+}

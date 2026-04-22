@@ -5,7 +5,7 @@ const app = express();
 
 //setup bootstrap 
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
-
+app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')));
 
 // connect to mongo
 const dotenv = require('dotenv').config()
@@ -50,29 +50,44 @@ function checkIfLoggedIn(request, response, nextAction){
             nextAction()
         }else{
             request.session.destroy()
-            response.sendFile(path.join(__dirname, '/views', 'login.html'))
+            response.sendFile(path.join(__dirname, '/views', '/.html'))
         }
     }
     // if not logged in, send to notLogged
     else{
         request.session.destroy()
-        response.sendFile(path.join(__dirname, '/views', 'login.html'))
+        response.sendFile(path.join(__dirname, '/views', '/.html'))
     } 
 }
 
 // post request when user submits login form
 app.post(`/login`, async (request, response)=>{
-  if(await userModel.checkUser(request.body.username, request.body.password)){
+    console.log(request.body)
+  if(await Users.checkUser(request.body.username, request.body.password)){
+    console.log("Login successful")
         request.session.username=request.body.username
-        response.sendFile(path.join(__dirname, '/views', 'app.html'))
+        response.redirect("/app"); // use redirect to go from modal to app page
     } else{
-        response.sendFile(path.join(__dirname, '/views', 'login.html'))
+        console.log("Login failed")
+        response.sendFile(path.join(__dirname, '/views', 'welcome.html'))
     }
 })
 
+
+app.post('/register', async (request, response) => {
+    const success = await Users.addUser(request.body.username, request.body.password);
+    if (success) {
+        response.sendFile(path.join(__dirname, '/views', 'app.html'));
+    } else {
+        response.sendFile(path.join(__dirname, '/views', 'registration_failed.html'));
+    }
+})
+
+
+
 // user requests /login end point
-app.get('/login', (request, response)=>{
-    response.sendFile(path.join(__dirname, '/views', 'login.html'))
+app.get('/welcome', (request, response)=>{
+    response.sendFile(path.join(__dirname, '/views', 'welcome.html'))
 })
 
 // user requests /app end point
