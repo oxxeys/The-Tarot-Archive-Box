@@ -5,6 +5,7 @@ const {Schema, model} = mongoose
 const userSchema = new Schema({
     username: String,
     password: String,
+    boxID: String,
 })
 
 
@@ -17,8 +18,7 @@ async function checkUser(username, password){
     let found = null
     found = await userData.findOne({username:username}).exec()
 
-    //let found=userData.find(thisUser=>thisUser.username==username) // arrow function that assigns each item in userData to "thisUser" temporarily, then checks if the username is equal to the username the client just inputted to the form 
-    if(found){ // js treats a variable with a value as true, var with no value is false
+    if(found){
         return found.password==password // checks password - if it is same then it will return true
     } else{
         return false
@@ -26,7 +26,29 @@ async function checkUser(username, password){
 }
 
 
+async function addNewUser(username, password, boxID){
+    //add user to database 
+    
+    //check database to see if user already exists
+    let findUser = await userData.findOne({username:username}).exec()
+
+    if(findUser){
+        return false
+    }
+    else{
+        let newUserData = {
+            username: username,
+            password: password, 
+            boxID: boxID
+        }
+        await userData.create(newUserData)
+        return true
+    }
+
+
+}
+
 module.exports={
     checkUser,
-  
+    addNewUser
 }
