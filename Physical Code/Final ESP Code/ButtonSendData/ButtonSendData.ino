@@ -1,13 +1,24 @@
+//Connectivity Libaries
 #include <WiFi.h>
 #include <WebServer.h>
 #include <HTTPClient.h>
 #include <Preferences.h>
+//NFC Libaries
+#include <Wire.h>
+#include <SPI.h>
+#include <Adafruit_PN532.h>
+
+#define PN532_SS 5
+Adafruit_PN532 nfc(PN532_SS);
 
 WebServer server(80);
 Preferences preferences;
 
 const int buttonPin = 14;
 bool shouldRestart = false;
+
+//array that stores card data
+int cardToSend[5] = {0, 0, 0, 0, 0};
 
 String ssid;
 String password;
@@ -131,12 +142,18 @@ void sendEvent() {
     http.begin("https://the-tarot-archive-box.onrender.com/data");
     http.addHeader("Content-Type", "application/json");
 
-
     //JSON data to be sent
-    String json = R"({
-      "box_id": "TEST123",
-      "event": "button_pressed"
-    })";
+    String json = "{\"box_id\": \"TEST123\", \"card_id\": [";
+    for(int i = 0; i < 5; i++){
+      json += String(cardToSend[i]);
+      //need to add a comma at the end
+      if(i < 4){
+        json += ",";
+      }
+    }
+    json += "]}";
+
+
 
     int httpResponseCode = http.POST(json);
 
@@ -154,9 +171,89 @@ void sendEvent() {
   }
 }
 
+// NFC reader
+void ReadData() {
+  uint8_t success;
+  uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
+  uint8_t uidLength;      
+  
+  //Detect Card
+  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
+
+  if (success) {
+    if (uidLength == 7) {
+      uint8_t data[4];
+      uint8_t buffer[64];
+      int indexNumb = 0;
+
+      // Find the index of the data I put in text file
+      for (uint8_t i = 4; i < 11; i++) {
+        //read data of the page into data[], then if its the data we want, put it into buffer
+        if (nfc.ntag2xx_ReadPage(i, data)) {
+          for (int z = 0; z < 4; z++) {
+            buffer[indexNumb++] = data[z];
+          }
+        } else {
+          Serial.println("oh no");
+          break;
+        }
+      }
+
+      // loop through the data we got from the nfc
+      for (int i = 0; i < indexNumb; i++) {
+        //Look for text indicator (T / 0x54)
+        if (buffer[i] == 0x54) {
+          int langLength = buffer[i + 1];
+          int textStartsHere = i + 2 + langLength;
+
+          Serial.print("Card: ");
+
+          int arraySize = 0;
+
+          for (int j = textStartsHere; j < indexNumb; j++) {
+
+            //
+            if (buffer[j] == 0xFE) {
+              break;
+            }
+
+            Serial.write(buffer[j]);
+
+            if(arraySize < 5){
+              cardToSend[arraySize] = buffer[j];
+              arraySize++;
+            }
+            else{
+              break;
+            }
+          }
+
+          Serial.println();
+          break;
+        }
+      }
+
+    } else {
+      Serial.println("This doesn't seem to be an NTAG203 tag (UUID length != 7 bytes)!");
+    }
+  }
+}
+
 void setup() {
   Serial.begin(115200);
   pinMode(buttonPin, INPUT_PULLUP);
+
+  //setup nfc reader
+  SPI.begin(18, 19, 23);
+  nfc.begin();
+  uint32_t versiondata = nfc.getFirmwareVersion();
+
+  if (!versiondata) {
+    Serial.print("Didn't find PN53x board");
+    while (1)
+      ;  // halt
+  }
+
 
   connectToWiFi();
 }
@@ -173,11 +270,14 @@ void loop() {
     ESP.restart();
   }
 
-  // Button detection (fixed debounce)
+  // Button detection
   bool currentState = digitalRead(buttonPin);
 
+
+
   if (lastState == HIGH && currentState == LOW) {
-    Serial.println("Button Pressed!");
+    Serial.println("Button Pressed! Reading Data Now!");
+    ReadData();
     sendEvent();
   }
 

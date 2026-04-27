@@ -99,6 +99,7 @@ app.get('/app', checkIfLoggedIn, (req, res) => {
 
 // Data is sent from ESP32
 app.post("/data", (req, res) => {
+    console.log(req.headers);
     console.log(req.body);
     res.send("OK");
 
