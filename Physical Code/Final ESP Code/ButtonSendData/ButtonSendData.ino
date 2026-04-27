@@ -18,7 +18,7 @@ const int buttonPin = 14;
 bool shouldRestart = false;
 
 //array that stores card data
-int cardToSend[5] = {0, 0, 0, 0, 0};
+String cardToSend[5] = { "0", "0", "0", "0", "0" };
 
 String ssid;
 String password;
@@ -144,16 +144,16 @@ void sendEvent() {
 
     //JSON data to be sent
     String json = "{\"box_id\": \"TEST123\", \"card_id\": [";
-    for(int i = 0; i < 5; i++){
+    for (int i = 0; i < 5; i++) {
       json += String(cardToSend[i]);
       //need to add a comma at the end
-      if(i < 4){
+      if (i < 4) {
         json += ",";
       }
     }
     json += "]}";
 
-
+    Serial.print(json);
 
     int httpResponseCode = http.POST(json);
 
@@ -175,8 +175,8 @@ void sendEvent() {
 void ReadData() {
   uint8_t success;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
-  uint8_t uidLength;      
-  
+  uint8_t uidLength;
+
   //Detect Card
   success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
 
@@ -210,6 +210,8 @@ void ReadData() {
 
           int arraySize = 0;
 
+          String value = "";
+
           for (int j = textStartsHere; j < indexNumb; j++) {
 
             //
@@ -219,14 +221,17 @@ void ReadData() {
 
             Serial.write(buffer[j]);
 
-            if(arraySize < 5){
-              cardToSend[arraySize] = buffer[j];
-              arraySize++;
-            }
-            else{
-              break;
-            }
+
+            value += (char)buffer[j];
           }
+          if (arraySize < 5) {
+            //take the byte, cast it to a character and then have them be a string to keep them together
+            cardToSend[arraySize] = value;
+            arraySize++;
+          } else {
+            break;
+          }
+
 
           Serial.println();
           break;
