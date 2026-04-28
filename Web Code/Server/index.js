@@ -95,13 +95,31 @@ app.get('/welcome', (request, response) => {
 
 // user requests /app end point
 app.get('/app', checkIfLoggedIn, (req, res) => {
-    res.send(`Welcome ${req.session.username}`);
+    res.sendFile(path.join(__dirname, '/views', 'app.html'))
 });
+
+//user is in /app and wants data
+app.get ('/priorReadings', async (request, response)=>{
+    response.json({dataEntries: await Data.getDataFromDB()})
+})
+
+//user is in /app and wants FIRST data point
+app.get ('/mostRecentReading', async (request, response)=>{
+    response.json({dataEntriesOne: await Data.getOneDataFromDB()})
+})
+
+//user wants card images
+app.get('/image/:id', (request, response)=>{
+    const id = request.params.id
+    const filePath = path.join(__dirname, 'Assets', 'Cards-png', `${id}.png`)
+    console.log(__dirname)
+    response.sendFile(filePath)
+})
+
 
 // Data is sent from ESP32
 app.post("/data", async (req, res) => {
     console.log(req.body);
-    
 
     //Send data to mongo, store in db 
     //it comes in as 
@@ -116,7 +134,4 @@ app.post("/data", async (req, res) => {
         console.log("Couldnt Save Data!")
         res.status(500).send("Recieved Data!")
     }
-
-
-
 });

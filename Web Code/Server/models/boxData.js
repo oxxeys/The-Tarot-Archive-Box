@@ -19,7 +19,22 @@ async function addNewBoxData(boxID, data){
         return true
 }
 
+async function getDataFromDB(){
+    let recievedData=[]
+    recievedData = await boxData.find({})
+        .sort({ _id: -1})
+        .skip(1) // skip first one
+    return recievedData
+}
+
+async function getOneDataFromDB(){
+    let recievedData=[]
+    recievedData = await boxData.findOne().sort({ _id: -1})
+    return recievedData
+}
 
 module.exports={
-    addNewBoxData
+    addNewBoxData,
+    getDataFromDB,
+    getOneDataFromDB
 }

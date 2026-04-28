@@ -1,11 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    
+    <h1>The Tarot Archive Box</h1>
+    <h2>Welcome Back</h2>
+    <p>Scroll to explore!</p>
+
+    <h3>Most Recent Reading</h3>
+    <ul id="recent-reading" style="display: flex; flex-wrap: wrap;"></ul>
+
+    <h3>More Readings</h3>
+    <ul id="more-readings" style="display: flex; flex-wrap: wrap;"></ul>
+
+
+    <script>
+        const recentReading = document.getElementById('recent-reading')
+        const moreReadings = document.getElementById('more-readings')
+
+        fetch('/priorReadings')
+            .then(response => response.json())
+            .then(loadData)
+
+        fetch('/mostRecentReading')
+            .then(response => response.json())
+            .then(loadNewest)
+
+        function loadData(data) {
+            //data.dataEntries[0].data
+            console.log(data)
+            //data.dataEntries[0].data[0]
+            data.dataEntries.forEach(entry => {
+
+
+                //Check if entry > 0, if so, find the picture and load it in
+                //if below zero, break 
+
+                //set up const to hold array
+                entry.data.forEach(card => {
+
+                    if (card === 0) {
+                        return
+                    }
+
+                    let li = document.createElement('li')
+                    li.innerText = `${entry.data[0]}`
+                    moreReadings.appendChild(li)
+
+                    let img = document.createElement("img")
+                    img.src = `/image/${card}`
+                    img.height = 120
+
+                    moreReadings.appendChild(img)
+                })
+
+            })
+
+        }
+
+        function loadNewest(data) {
+            //set up const to hold array
+            const entry = data.dataEntriesOne
+            const card = entry.data[0]
+
+            entry.data.forEach(card => {
+
+                if (card === 0) {
+                    return
+                }
+
+                let li = document.createElement('li')
+                li.innerText = `${entry.data[0]}`
+                recentReading.appendChild(li)
+
+                let img = document.createElement("img")
+                img.src = `/image/${card}`
+                img.height = 120
+                recentReading.appendChild(img)
+            })
+
+
+        }
+
+    </script>
 </body>
+
 </html>
