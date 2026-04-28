@@ -160,7 +160,7 @@ void sendEvent() {
     Serial.print("Response: ");
     Serial.println(httpResponseCode);
 
-    if (httpResponseCode == -11) {
+    if (httpResponseCode > 0 ) {
       delay(5000);
       httpResponseCode = http.POST(json);
     }

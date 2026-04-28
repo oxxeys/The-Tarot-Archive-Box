@@ -110,8 +110,13 @@ app.post("/data", async (req, res) => {
     let sendData = await Data.addNewBoxData(req.body.box_id, req.body.card_id );
     if(sendData){
         console.log("Saved data")
+        res.status(200).send("Recieved Data!")
     }
     else{
         console.log("Couldnt Save Data!")
+        res.status(500).send("Recieved Data!")
     }
+
+
+
 });
