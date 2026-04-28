@@ -11,9 +11,9 @@ const userSchema = new Schema({
 
 const userData = model("users", userSchema)
 
-
+//return bool if user is there
 async function checkUser(username, password){
-    //return bool if user is there
+ 
 
     let found = null
     found = await userData.findOne({username:username}).exec()
@@ -25,9 +25,9 @@ async function checkUser(username, password){
     }
 }
 
-
+//add user to database
 async function addNewUser(username, password, boxID){
-    //add user to database 
+ 
     
     //check database to see if user already exists
     let findUser = await userData.findOne({username:username}).exec()
@@ -44,8 +44,6 @@ async function addNewUser(username, password, boxID){
         await userData.create(newUserData)
         return true
     }
-
-
 }
 
 module.exports={

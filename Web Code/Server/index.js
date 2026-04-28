@@ -20,6 +20,7 @@ mongoose.connect(DBConnection)
 
 // DB models
 const Users = require("./models/users.js");
+const Data = require("./models/boxData.js");
 const { request } = require("http");
 
 
@@ -98,11 +99,19 @@ app.get('/app', checkIfLoggedIn, (req, res) => {
 });
 
 // Data is sent from ESP32
-app.post("/data", (req, res) => {
-    console.log(req.headers);
+app.post("/data", async (req, res) => {
     console.log(req.body);
-    res.send("OK");
+    
 
     //Send data to mongo, store in db 
+    //it comes in as 
+    //req.body = { box_id: 'TEST123', card_id: [ 12, 0, 0, 0, 0 ] }
 
+    let sendData = await Data.addNewBoxData(req.body.box_id, req.body.card_id );
+    if(sendData){
+        console.log("Saved data")
+    }
+    else{
+        console.log("Couldnt Save Data!")
+    }
 });
