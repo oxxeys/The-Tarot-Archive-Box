@@ -3,6 +3,7 @@
 #include <WebServer.h>
 #include <HTTPClient.h>
 #include <Preferences.h>
+#include <DNSServer.h>
 //NFC Libaries
 #include <Wire.h>
 #include <SPI.h>
@@ -11,6 +12,11 @@
 #define PN532_SS 5
 Adafruit_PN532 nfc(PN532_SS);
 
+//setup dns server
+DNSServer dnsServer;
+const byte DNS_PORT = 53;
+
+//Webserver Setup
 WebServer server(80);
 Preferences preferences;
 
@@ -81,6 +87,8 @@ void handleSave() {
 // start AP mode
 void startAPMode() {
   WiFi.softAP("BoxSetup123");
+
+  dnsServer.start(DNS_PORT, "*", WiFi.softAPIP());
 
   Serial.print("AP IP: ");
   Serial.println(WiFi.softAPIP());
@@ -259,14 +267,18 @@ void setup() {
       ;  // halt
   }
 
-
   connectToWiFi();
 }
 
 bool lastState = HIGH;
 
 void loop() {
-  server.handleClient();
+  //Check if a ssid is saved, if so then allow dnsServer to process requests allowing forced sending 
+    if (ssid == "") {
+    dnsServer.processNextRequest();
+    server.handleClient();
+    return;
+  }
 
   // Restart safely outside request
   if (shouldRestart) {
