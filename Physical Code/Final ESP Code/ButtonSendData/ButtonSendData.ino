@@ -9,8 +9,14 @@
 #include <SPI.h>
 #include <Adafruit_PN532.h>
 
-#define PN532_SS 5
-Adafruit_PN532 nfc(PN532_SS);
+Adafruit_PN532 nfc[5] = {
+  Adafruit_PN532(5),
+  Adafruit_PN532(32),
+  Adafruit_PN532(27),
+  Adafruit_PN532(33),
+  Adafruit_PN532(15)
+};
+
 
 //setup dns server
 DNSServer dnsServer;
@@ -151,7 +157,7 @@ void sendEvent() {
     http.addHeader("Content-Type", "application/json");
 
     //JSON data to be sent
-    String json = "{\"box_id\": \"TEST123\", \"card_id\": [";
+    String json = "{\"box_id\": \"Billy's Box!\", \"card_id\": [";
     for (int i = 0; i < 5; i++) {
       json += String(cardToSend[i]);
       //need to add a comma at the end
@@ -168,7 +174,7 @@ void sendEvent() {
     Serial.print("Response: ");
     Serial.println(httpResponseCode);
 
-    if (httpResponseCode > 0 ) {
+    if (httpResponseCode < 0 ) {
       delay(5000);
       httpResponseCode = http.POST(json);
     }
@@ -180,13 +186,13 @@ void sendEvent() {
 }
 
 // NFC reader
-void ReadData() {
+void ReadData(int readerIndex) {
   uint8_t success;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
   uint8_t uidLength;
 
   //Detect Card
-  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
+  success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
 
   if (success) {
     if (uidLength == 7) {
@@ -197,7 +203,7 @@ void ReadData() {
       // Find the index of the data I put in text file
       for (uint8_t i = 4; i < 11; i++) {
         //read data of the page into data[], then if its the data we want, put it into buffer
-        if (nfc.ntag2xx_ReadPage(i, data)) {
+        if (nfc[readerIndex].ntag2xx_ReadPage(i, data)) {
           for (int z = 0; z < 4; z++) {
             buffer[indexNumb++] = data[z];
           }
@@ -216,7 +222,7 @@ void ReadData() {
 
           Serial.print("Card: ");
 
-          int arraySize = 0;
+          // int arraySize = 0;
 
           String value = "";
 
@@ -232,13 +238,16 @@ void ReadData() {
 
             value += (char)buffer[j];
           }
-          if (arraySize < 5) {
-            //take the byte, cast it to a character and then have them be a string to keep them together
-            cardToSend[arraySize] = value;
-            arraySize++;
-          } else {
-            break;
-          }
+          
+          cardToSend[readerIndex] = value;
+
+          // if (arraySize < 5) {
+          //   //take the byte, cast it to a character and then have them be a string to keep them together
+            
+          //   arraySize++;
+          // } else {
+          //   break;
+          // }
 
 
           Serial.println();
@@ -258,14 +267,44 @@ void setup() {
 
   //setup nfc reader
   SPI.begin(18, 19, 23);
-  nfc.begin();
-  uint32_t versiondata = nfc.getFirmwareVersion();
 
-  if (!versiondata) {
-    Serial.print("Didn't find PN53x board");
-    while (1)
-      ;  // halt
+  int pins[5] = {5,32,27,33,15};
+
+
+  for(int i=0;i<5;i++){
+    pinMode(pins[i], OUTPUT);
+    digitalWrite(pins[i], HIGH);
   }
+
+  for(int i=0;i<5;i++){
+    //manually controll if pin is high / low 1 by 1 - if not manual it overloads
+    digitalWrite(pins[i], LOW);
+
+    nfc[i].begin();
+
+    uint32_t versiondata = nfc[i].getFirmwareVersion();
+
+    digitalWrite(pins[i], HIGH);
+
+     if (!versiondata) {
+      Serial.print("Didn't find : ");
+      Serial.print(i);
+      while (1)
+        ;  // inf loop
+   }
+
+  };
+
+  
+
+  // nfc.begin();
+  // uint32_t versiondata = nfc.getFirmwareVersion();
+
+  // if (!versiondata) {
+  //   Serial.print("Didn't find PN53x board");
+  //   while (1)
+  //     ;  // halt
+  // }
 
   connectToWiFi();
 }
@@ -294,9 +333,14 @@ void loop() {
 
   if (lastState == HIGH && currentState == LOW) {
     Serial.println("Button Pressed! Reading Data Now!");
-    ReadData();
+     for(int i=0;i<5;i++){
+        cardToSend[i] = "0";
+        ReadData(i);
+     }
     sendEvent();
   }
 
   lastState = currentState;
+
+  
 }
