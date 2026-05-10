@@ -9,14 +9,15 @@
 #include <SPI.h>
 #include <Adafruit_PN532.h>
 
+// #define PN532_SS 5
 Adafruit_PN532 nfc[5] = {
   Adafruit_PN532(5),
-  Adafruit_PN532(32),
+  Adafruit_PN532(21),
   Adafruit_PN532(27),
   Adafruit_PN532(33),
-  Adafruit_PN532(15)
+  Adafruit_PN532(16)
 };
-
+int pins[5] = { 5, 21, 27, 33, 16 };
 
 //setup dns server
 DNSServer dnsServer;
@@ -156,6 +157,8 @@ void sendEvent() {
     http.begin("https://the-tarot-archive-box.onrender.com/data");
     http.addHeader("Content-Type", "application/json");
 
+    http.setTimeout(5000);
+
     //JSON data to be sent
     String json = "{\"box_id\": \"Billy's Box!\", \"card_id\": [";
     for (int i = 0; i < 5; i++) {
@@ -169,14 +172,18 @@ void sendEvent() {
 
     Serial.print(json);
 
+    //the post request thats sending data
     int httpResponseCode = http.POST(json);
 
-    Serial.print("Response: ");
+    Serial.println("Response: ");
     Serial.println(httpResponseCode);
 
-    if (httpResponseCode < 0 ) {
-      delay(5000);
+    if (httpResponseCode < 0) {
+      delay(10000);
       httpResponseCode = http.POST(json);
+
+      Serial.println("Response 2: ");
+      Serial.println(httpResponseCode);
     }
 
     http.end();
@@ -185,14 +192,52 @@ void sendEvent() {
   }
 }
 
+//function to clean up SPI
+void resetSPI() {
+  SPI.end();
+  delay(5);
+  SPI.begin(18, 19, 23);
+  delay(5);
+}
+
 // NFC reader
 void ReadData(int readerIndex) {
   uint8_t success;
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
   uint8_t uidLength;
 
+  //reset cardToSend data
+  cardToSend[readerIndex] = "0";
+
+  resetSPI();
+
+  //turn all readers off
+  for (int i = 0; i < 5; i++) {
+    digitalWrite(pins[i], HIGH);
+  }
+
+  delayMicroseconds(200);
+
+
+  // delay(50);
+
+  // nfc[readerIndex].begin();
+
+  delay(900);
+
+  Serial.print("Reading reader ");
+  Serial.println(readerIndex);
+
   //Detect Card
   success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
+
+  if (!success) {
+    success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
+  }
+
+  delay(50);
+
+
 
   if (success) {
     if (uidLength == 7) {
@@ -238,12 +283,12 @@ void ReadData(int readerIndex) {
 
             value += (char)buffer[j];
           }
-          
+
           cardToSend[readerIndex] = value;
 
           // if (arraySize < 5) {
           //   //take the byte, cast it to a character and then have them be a string to keep them together
-            
+
           //   arraySize++;
           // } else {
           //   break;
@@ -259,6 +304,8 @@ void ReadData(int readerIndex) {
       Serial.println("This doesn't seem to be an NTAG203 tag (UUID length != 7 bytes)!");
     }
   }
+
+  digitalWrite(pins[readerIndex], HIGH);
 }
 
 void setup() {
@@ -268,15 +315,17 @@ void setup() {
   //setup nfc reader
   SPI.begin(18, 19, 23);
 
-  int pins[5] = {5,32,27,33,15};
 
 
-  for(int i=0;i<5;i++){
+
+  for (int i = 0; i < 5; i++) {
     pinMode(pins[i], OUTPUT);
+    delay(100);
     digitalWrite(pins[i], HIGH);
+    delay(100);
   }
 
-  for(int i=0;i<5;i++){
+  for (int i = 0; i < 5; i++) {
     //manually controll if pin is high / low 1 by 1 - if not manual it overloads
     digitalWrite(pins[i], LOW);
 
@@ -286,16 +335,14 @@ void setup() {
 
     digitalWrite(pins[i], HIGH);
 
-     if (!versiondata) {
+    if (!versiondata) {
       Serial.print("Didn't find : ");
       Serial.print(i);
       while (1)
         ;  // inf loop
-   }
-
+    }
   };
 
-  
 
   // nfc.begin();
   // uint32_t versiondata = nfc.getFirmwareVersion();
@@ -312,8 +359,8 @@ void setup() {
 bool lastState = HIGH;
 
 void loop() {
-  //Check if a ssid is saved, if so then allow dnsServer to process requests allowing forced sending 
-    if (ssid == "") {
+  //Check if a ssid is saved, if so then allow dnsServer to process requests allowing forced sending
+  if (ssid == "") {
     dnsServer.processNextRequest();
     server.handleClient();
     return;
@@ -329,18 +376,15 @@ void loop() {
   // Button detection
   bool currentState = digitalRead(buttonPin);
 
-
-
   if (lastState == HIGH && currentState == LOW) {
     Serial.println("Button Pressed! Reading Data Now!");
-     for(int i=0;i<5;i++){
-        cardToSend[i] = "0";
-        ReadData(i);
-     }
+    for (int i = 0; i < 5; i++) {
+      cardToSend[i] = "0";
+      ReadData(i);
+      delay(30);
+    }
     sendEvent();
   }
 
   lastState = currentState;
-
-  
 }
