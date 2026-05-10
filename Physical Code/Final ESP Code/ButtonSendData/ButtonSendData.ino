@@ -14,10 +14,10 @@ Adafruit_PN532 nfc[5] = {
   Adafruit_PN532(5),
   Adafruit_PN532(21),
   Adafruit_PN532(27),
-  Adafruit_PN532(33),
+  Adafruit_PN532(32),
   Adafruit_PN532(16)
 };
-int pins[5] = { 5, 21, 27, 33, 16 };
+int pins[5] = { 5, 21, 27, 32, 16 };
 
 //setup dns server
 DNSServer dnsServer;
@@ -93,7 +93,7 @@ void handleSave() {
 
 // start AP mode
 void startAPMode() {
-  WiFi.softAP("BoxSetup123");
+  WiFi.softAP("MysticReaderSetup!");
 
   dnsServer.start(DNS_PORT, "*", WiFi.softAPIP());
 
@@ -106,7 +106,7 @@ void startAPMode() {
   server.begin();
 
   Serial.println("AP Mode Started");
-  Serial.println("Connect to: BoxSetup123");
+  Serial.println("Connect to: MysticReaderSetup");
 }
 
 // 1 - connect to wifi
@@ -179,7 +179,7 @@ void sendEvent() {
     Serial.println(httpResponseCode);
 
     if (httpResponseCode < 0) {
-      delay(10000);
+      delay(30000);
       httpResponseCode = http.POST(json);
 
       Serial.println("Response 2: ");
@@ -200,6 +200,18 @@ void resetSPI() {
   delay(5);
 }
 
+void selectReader(int i) {
+  // disable all
+  for (int j = 0; j < 5; j++) {
+    digitalWrite(pins[j], HIGH);
+  }
+
+  delayMicroseconds(50);
+  // enable only one
+  digitalWrite(pins[i], LOW);
+  delayMicroseconds(200);
+}
+
 // NFC reader
 void ReadData(int readerIndex) {
   uint8_t success;
@@ -209,14 +221,9 @@ void ReadData(int readerIndex) {
   //reset cardToSend data
   cardToSend[readerIndex] = "0";
 
-  resetSPI();
+  selectReader(readerIndex);
 
-  //turn all readers off
-  for (int i = 0; i < 5; i++) {
-    digitalWrite(pins[i], HIGH);
-  }
-
-  delayMicroseconds(200);
+  delay(20);
 
 
   // delay(50);
@@ -338,11 +345,10 @@ void setup() {
     if (!versiondata) {
       Serial.print("Didn't find : ");
       Serial.print(i);
-      while (1)
-        ;  // inf loop
-    }
+      //   while (1)
+      //     ;  // inf loop
+    };
   };
-
 
   // nfc.begin();
   // uint32_t versiondata = nfc.getFirmwareVersion();
@@ -381,7 +387,6 @@ void loop() {
     for (int i = 0; i < 5; i++) {
       cardToSend[i] = "0";
       ReadData(i);
-      delay(30);
     }
     sendEvent();
   }
