@@ -6,43 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/welcomePage.css" rel="stylesheet">
 </head>
 
-<body>
-    <h2>Mystic Reader</h2>
+<body class="fadeIn d-flex text-center justify-content-center align-items-center min-vh-100 backgroundStyle hideOverflow">
 
-    <p>Let the cards reveal your truth</p>
+    <div>
+        <h1>Mystic Reader</h1>
 
+        <p>Let the cards reveal your truth</p>
 
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Login</button>
-    <button></button>
+        <div>
+            <button type="button" class="btn btn-mysticBox" data-bs-toggle="modal" data-bs-target="#exampleModal">Login
+                /
+                Register</button>
+
+            <button type="button" class="btn btn-mysticBox" data-bs-toggle="modal" data-bs-target="#AboutUs">What
+                is
+                this?!</button>
+        </div>
+    </div>
 
 
     <!-- Login / Register Modal -->
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <form action="/login" method="POST">
-                        <label>Username</label>
-                        <input type="text" id="username" name="username"><br>
-                        <label>Password</label>
-                        <input type="password" id="password" name="password"><br>
-                        <input type="submit" value="Login">
-                    </form>
+            <div class="modal-content ">
+                <div class="modal-body backgroundStyle">
+                    <div class="d-flex flex-column align-items-center justify-content-center text-center min-vh-100">
+                        <form action="/login" method="POST">
+                            <label>Username</label>
+                            <input type="text" id="username" name="username"><br>
+                            <label>Password</label>
+                            <input type="password" id="password" name="password"><br>
+                            <input type="submit" value="Login">
+                        </form>
 
-                    <form action="/register" method="POST">
-                        <label>Username</label>
-                        <input type="text" id="username" name="username"><br>
-                        <label>Password</label>
-                        <input type="text" id="password" name="password"><br>
-                        <label>Box ID</label>
-                        <input type="text" id="boxID" name="boxID"><br>
-                        <input type="submit" value="Register">
-                    </form>
+                        <form action="/register" method="POST">
+                            <label>Username</label>
+                            <input type="text" id="username" name="username"><br>
+                            <label>Password</label>
+                            <input type="text" id="password" name="password"><br>
+                            <label>Box ID</label>
+                            <input type="text" id="boxID" name="boxID"><br>
+                            <input type="submit" value="Register">
+                        </form>
 
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,7 +65,25 @@
 
     <!-- About Us Modal -->
 
-
+    <div class="modal fade" id="AboutUs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content ">
+                <div
+                    class="modal-body backgroundStyle d-flex flex-column align-items-center justify-content-center text-center min-vh-100">
+                    <div style="max-width: 500px; width: 100%;" class="p-4">
+                        <h2>A Box To Read Your Future</h2>
+                        <p>Tarot readings are a type of divination that have links back to 15th century Italy, using a
+                            pack
+                            of 78 special cards, each with their own assigned meanings.</p>
+                        <p>The Tarot Box is a physical box that allows you to do a tarot reading and then submit it to
+                            this
+                            website, allowing you to track your previous readings and write journal entries! </p>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </body>

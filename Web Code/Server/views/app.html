@@ -5,19 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
 </head>
 
-<body>
-    <h1>The Tarot Archive Box</h1>
-    <h2>Welcome Back</h2>
-    <p>Scroll to explore!</p>
+<body class="fadeIn backgroundStyle">
+    <div class="container d-flex text-center justify-content-center align-items-center min-vh-100">
+        <h1>The Tarot Archive Box</h1>
+        <h2>Welcome Back</h2>
+        <p>Scroll to explore!</p>
+    </div>
 
-    <h3>Most Recent Reading</h3>
-    <ul id="recent-reading" style="display: flex; flex-wrap: wrap;"></ul>
+    <div class="container">
+        <h3>Most Recent Reading</h3>
+        <ul id="recent-reading" style="display: flex; flex-wrap: wrap;"></ul>
+    </div>
 
-    <h3>More Readings</h3>
-    <ul id="more-readings" style="display: flex; flex-wrap: wrap;"></ul>
-
+    <div class="container">
+        <h3>More Readings</h3>
+        <ul id="more-readings" style="display: flex; flex-wrap: wrap;"></ul>
+    </div>
 
     <script>
         const recentReading = document.getElementById('recent-reading')

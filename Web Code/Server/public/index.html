@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Mystic Reader</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet"> 
 </head>
-<body onload="timer()">
-    <h1>Mystic Reader</h1>
-    <h3>Please register or login</h3>
-    <nav>
-        <a href="welcome">Welcome</a>
-    </nav>
-    <p>This is a simple loading page - it will be refactored to push users to /welcome.html (where welcome takes you!)</p>
+<body onload="timer()" class="fadeIn backgroundStyle">
+    <div class="d-flex justify-content-center align-items-center min-vh-100">
+        <div class="loader fadeIn"></div>
+    </div>
+    
 
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script>

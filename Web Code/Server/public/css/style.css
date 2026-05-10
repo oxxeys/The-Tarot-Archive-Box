@@ -1,0 +1,79 @@
+:root{
+/* set up variables to control animation with */
+
+}
+
+@keyframes animateBackground {
+    0%   { background-position: 0% 50%;}
+    20%  { background-position: 100% 100%; }
+    60%  { background-position: 50% 0%; }
+    100% { background-position: 0% 50%; } 
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.hideOverflow{
+  overflow: hidden;
+}
+
+.backgroundStyle{
+    min-height: 400vh;
+    background: 
+        radial-gradient(800px 600px at 60% 40%,rgba(159, 118, 130, 0.8) 0%, transparent 70%), 
+        linear-gradient(144deg,rgba(159, 118, 130, 0.9) 0%,rgba(96, 88, 113, 0.9) 50%, rgba(96, 88, 113, 0.9) 60%, rgba(159, 118, 130, 0.9) 100%),
+        radial-gradient(ellipse at 30% 70%,rgba(96, 88, 113, 0.8) 0%, rgba(159, 118, 130, 0.1) 50%, transparent 80%),
+        rgb(85, 77, 100)
+    ;
+    background-size: 150% 150%;
+    animation: animateBackground 60s ease-in-out infinite;
+    color: aliceblue;
+}
+
+.fadeIn{
+    opacity: 1;
+    animation: fadeIn 1s ease-in;
+}
+
+
+/* used a loader from https://cssloaders.github.io/ - this is hopefully a placeholder as I want to make my own! */
+.loader {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  position: relative;
+}
+.loader::after,
+.loader::before {
+  content: '';  
+  box-sizing: border-box;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #2c0f3f;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: animloader 2s linear infinite;
+}
+.loader::after {
+  animation-delay: 1s;
+}
+
+@keyframes animloader {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+    
