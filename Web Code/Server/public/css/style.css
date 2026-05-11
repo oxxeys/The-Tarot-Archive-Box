@@ -42,6 +42,15 @@
 }
 
 
+/* My own classes - in place of bootstrap not having them! */
+.min-vh-75 {
+    min-height: 75vh;
+}
+.min-vh-50 {
+    min-height: 50vh;
+}
+
+
 /* used a loader from https://cssloaders.github.io/ - this is hopefully a placeholder as I want to make my own! */
 .loader {
   width: 100px;

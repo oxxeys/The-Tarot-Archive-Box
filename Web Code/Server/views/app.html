@@ -10,20 +10,25 @@
 </head>
 
 <body class="fadeIn backgroundStyle">
-    <div class="container d-flex text-center justify-content-center align-items-center min-vh-100">
+    <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-100">
         <h1>The Tarot Archive Box</h1>
         <h2>Welcome Back</h2>
+        <br>
+        <br>
+        <hr class="w-75" />
+        <br>
+        <br>
         <p>Scroll to explore!</p>
     </div>
 
-    <div class="container">
+    <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-75">
         <h3>Most Recent Reading</h3>
         <ul id="recent-reading" style="display: flex; flex-wrap: wrap;"></ul>
     </div>
 
-    <div class="container">
+    <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-50">
         <h3>More Readings</h3>
-        <ul id="more-readings" style="display: flex; flex-wrap: wrap;"></ul>
+        <ul id="more-readings"></ul>
     </div>
 
     <script>
@@ -34,13 +39,131 @@
             .then(response => response.json())
             .then(loadData)
 
+
+        async function callAPIforCardData(ID) {
+            console.log(ID)
+            const response = await fetch(`https://tarotapi.dev/api/v1/cards/${ID}`)
+
+            const data = await response.json();
+            console.log(data)
+            return data
+        }
+
+        function calculateCard(ID, stringCardToFind) {
+            if (ID === 1) {
+                stringCardToFind += "ac"
+            }
+            else if (ID === 11) {
+                stringCardToFind += "pa"
+            }
+            else if (ID === 12) {
+                stringCardToFind += "kn"
+            }
+            else if (ID === 13) {
+                stringCardToFind += "qu"
+            }
+            else if (ID === 14) {
+                stringCardToFind += "ki"
+            }
+            else if (ID > 10 && ID != 1) {
+                stringCardToFind += "0"
+            }
+            if (ID >= 2 && ID <= 10) {
+
+                stringCardToFind += ID.toString().padStart(2, "0")
+            }
+            return stringCardToFind
+        }
+
+
         fetch('/mostRecentReading')
             .then(response => response.json())
             .then(loadNewest)
 
+        function loadNewest(data) {
+            //set up const to hold array
+            const entry = data.dataEntriesOne
+            const card = entry.data[0]
+
+            entry.data.forEach(async (card) => {
+
+
+                if (card === 0) {
+                    //if its empty, should return a missing space!
+                    return
+                }
+
+                // let li = document.createElement('li')
+                // li.innerText = card
+                // recentReading.appendChild(li)
+
+                let img = document.createElement("img")
+                img.src = `/image/${card}`
+                img.height = 120
+                // img.className = "m-4"
+
+
+                // API call - if statments to decide which call to make based on the card 
+                let ID = 0
+                let stringCardToFind = ""
+                if (card >= 1 && card <= 22) {
+                    ID = card - 1
+                    stringCardToFind += "ar"
+                    stringCardToFind += ID.toString().padStart(2, "0")
+                    // console.log(ID)
+                }
+                else if (card >= 23 && card <= 36) {
+                    stringCardToFind += "wa"
+                    ID = card - 22
+                    stringCardToFind = calculateCard(ID, stringCardToFind)
+
+                    //console.log(ID + " : " + stringCardToFind)
+                }
+                else if (card >= 37 && card <= 50) {
+                    stringCardToFind += "cu"
+                    ID = card - 36
+                    stringCardToFind = calculateCard(ID, stringCardToFind)
+
+                    //console.log(ID + " : " + stringCardToFind)
+                }
+                else if (card >= 51 && card <= 64) {
+                    stringCardToFind += "sw"
+                    ID = card - 50
+                    stringCardToFind = calculateCard(ID, stringCardToFind)
+
+                    //console.log(ID + " : " + stringCardToFind)
+                }
+                else if (card >= 65 && card <= 78) {
+                    stringCardToFind += "pe"
+                    ID = card - 64
+                    stringCardToFind = calculateCard(ID, stringCardToFind)
+
+                    //console.log(ID + " : " + stringCardToFind)
+                }
+
+                let cardData = await callAPIforCardData(stringCardToFind)
+                let cardText = document.createElement('p')
+                cardText.innerText = cardData.card.meaning_up
+
+                let cardContainer = document.createElement(`div`)
+                cardContainer.className = "p-2 text-center"
+                cardContainer.style.width = "15rem"
+
+                
+cardContainer.appendChild(img)
+                cardContainer.appendChild(cardText)
+
+                
+
+                recentReading.appendChild(cardContainer)
+            })
+
+
+        }
+
         function loadData(data) {
             //data.dataEntries[0].data
-            console.log(data)
+            // console.log(data)
             //data.dataEntries[0].data[0]
             data.dataEntries.forEach(entry => {
 
@@ -48,51 +171,33 @@
                 //Check if entry > 0, if so, find the picture and load it in
                 //if below zero, break 
 
+                const entryRow = document.createElement("div")
+                entryRow.className = "d-flex flex-wrap gap-3 justify-content-center m-4"
+
                 //set up const to hold array
                 entry.data.forEach(card => {
 
                     if (card === 0) {
+                        //if its empty, should return a missing space!
                         return
                     }
 
-                    let li = document.createElement('li')
-                    li.innerText = `${entry.data[0]}`
-                    moreReadings.appendChild(li)
+                    // let li = document.createElement('li')
+                    // li.innerText = `${entry.data[0]}`
+                    // moreReadings.appendChild(li)
 
                     let img = document.createElement("img")
                     img.src = `/image/${card}`
                     img.height = 120
 
-                    moreReadings.appendChild(img)
+                    entryRow.appendChild(img)
                 })
-
+                moreReadings.appendChild(entryRow)
             })
 
         }
 
-        function loadNewest(data) {
-            //set up const to hold array
-            const entry = data.dataEntriesOne
-            const card = entry.data[0]
 
-            entry.data.forEach(card => {
-
-                if (card === 0) {
-                    return
-                }
-
-                let li = document.createElement('li')
-                li.innerText = `${entry.data[0]}`
-                recentReading.appendChild(li)
-
-                let img = document.createElement("img")
-                img.src = `/image/${card}`
-                img.height = 120
-                recentReading.appendChild(img)
-            })
-
-
-        }
 
     </script>
 </body>
