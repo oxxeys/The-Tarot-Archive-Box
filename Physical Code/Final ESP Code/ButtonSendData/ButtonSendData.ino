@@ -236,10 +236,10 @@ void ReadData(int readerIndex) {
   Serial.println(readerIndex);
 
   //Detect Card
-  success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
+  success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 500);
 
   if (!success) {
-    success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
+    success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 500);
   }
 
   delay(50);
@@ -322,7 +322,9 @@ void setup() {
   //setup nfc reader
   SPI.begin(18, 19, 23);
 
-
+  // preferences.begin("wifi", false);
+  // preferences.clear();
+  // preferences.end();
 
 
   for (int i = 0; i < 5; i++) {
