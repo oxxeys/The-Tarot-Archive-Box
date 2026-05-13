@@ -12,12 +12,12 @@
 // #define PN532_SS 5
 Adafruit_PN532 nfc[5] = {
   Adafruit_PN532(5),
-  Adafruit_PN532(21),
+  Adafruit_PN532(33),
   Adafruit_PN532(27),
-  Adafruit_PN532(32),
+  Adafruit_PN532(14),
   Adafruit_PN532(16)
 };
-int pins[5] = { 5, 21, 27, 32, 16 };
+int pins[5] = { 5, 33, 27, 14, 16 };
 
 //setup dns server
 DNSServer dnsServer;
@@ -27,7 +27,7 @@ const byte DNS_PORT = 53;
 WebServer server(80);
 Preferences preferences;
 
-const int buttonPin = 14;
+const int buttonPin = 21;
 bool shouldRestart = false;
 
 //array that stores card data
@@ -220,25 +220,25 @@ void ReadData(int readerIndex) {
 
   //reset cardToSend data
   cardToSend[readerIndex] = "0";
-
+  resetSPI();
   selectReader(readerIndex);
-
-  delay(20);
-
-
   // delay(50);
 
   // nfc[readerIndex].begin();
 
-  delay(900);
+  delay(50);
 
   Serial.print("Reading reader ");
   Serial.println(readerIndex);
 
   //Detect Card
   success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 500);
+   Serial.println("Done reading!");
 
   if (!success) {
+    Serial.print("Reader ");
+    Serial.print(readerIndex);
+    Serial.println("failed. Trying again:  ");
     success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 500);
   }
 
@@ -347,19 +347,9 @@ void setup() {
     if (!versiondata) {
       Serial.print("Didn't find : ");
       Serial.print(i);
-      //   while (1)
-      //     ;  // inf loop
+      Serial.println("");
     };
   };
-
-  // nfc.begin();
-  // uint32_t versiondata = nfc.getFirmwareVersion();
-
-  // if (!versiondata) {
-  //   Serial.print("Didn't find PN53x board");
-  //   while (1)
-  //     ;  // halt
-  // }
 
   connectToWiFi();
 }
@@ -389,6 +379,9 @@ void loop() {
     for (int i = 0; i < 5; i++) {
       cardToSend[i] = "0";
       ReadData(i);
+      Serial.println("5 second delay");
+      delay(5000);
+      Serial.println("delay done");
     }
     sendEvent();
   }
