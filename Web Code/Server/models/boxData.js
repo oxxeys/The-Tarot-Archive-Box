@@ -19,17 +19,17 @@ async function addNewBoxData(boxID, data){
         return true
 }
 
-async function getDataFromDB(){
+async function getDataFromDB(boxID){
     let recievedData=[]
-    recievedData = await boxData.find({})
+    recievedData = await boxData.find({boxID: boxID})
         .sort({ _id: -1})
         .skip(1) // skip first one
     return recievedData
 }
 
-async function getOneDataFromDB(){
+async function getOneDataFromDB(boxID){
     let recievedData=[]
-    recievedData = await boxData.findOne().sort({ _id: -1})
+    recievedData = await boxData.findOne({boxID: boxID}).sort({ _id: -1})
     return recievedData
 }
 

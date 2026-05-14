@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon" href="/logo.ico">
 </head>
 
-<body class="backgroundStyle">
+<body class="backgroundStyle  ">
     <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-100">
         <h1>The Tarot Archive Box</h1>
         <h2>Welcome Back</h2>
@@ -84,7 +84,20 @@
         function loadNewest(data) {
             //set up const to hold array
             const entry = data.dataEntriesOne
+
+            if(!entry){
+                console.log("No cards")
+                let text = document.createElement('p')
+
+                text.innerText = "No cards! Do a reading with a box!"
+                text.className = "p-2 text-center fs-4 text-decoration-underline"
+                recentReading.appendChild(text)
+                
+                return
+            }
+
             const card = entry.data[0]
+            
 
             entry.data.forEach(async (card) => {
 
@@ -150,11 +163,11 @@
                 cardContainer.className = "p-2 text-center"
                 cardContainer.style.width = "15rem"
 
-                
-cardContainer.appendChild(img)
+
+                cardContainer.appendChild(img)
                 cardContainer.appendChild(cardText)
 
-                
+
 
                 recentReading.appendChild(cardContainer)
             })
@@ -166,8 +179,11 @@ cardContainer.appendChild(img)
             //data.dataEntries[0].data
             // console.log(data)
             //data.dataEntries[0].data[0]
-            data.dataEntries.forEach(entry => {
 
+
+            
+            data.dataEntries.forEach(entry => {
+                
 
                 //Check if entry > 0, if so, find the picture and load it in
                 //if below zero, break 

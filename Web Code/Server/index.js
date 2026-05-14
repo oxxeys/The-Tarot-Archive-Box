@@ -63,11 +63,13 @@ function checkIfLoggedIn(request, response, nextAction) {
 
 // post request when user submits login form
 app.post(`/login`, async (request, response) => {
-    console.log(request.body)
-    if (await Users.checkUser(request.body.username, request.body.password)) {
+    const userData = await Users.checkUser(request.body.username, request.body.password)
+    if (userData) {
         console.log("Login successful")
         request.session.username = request.body.username
-        response.redirect("/app"); // use redirect to go from modal to app page
+        request.session.boxID = userData.boxID
+        //console.log(req.session.boxID)
+        response.redirect("/app") // use redirect to go from modal to app page
     } else {
         console.log("Login failed")
         response.sendFile(path.join(__dirname, '/views', 'welcome.html'))
@@ -79,10 +81,10 @@ app.post('/register', async (request, response) => {
     const success = await Users.addNewUser(request.body.username, request.body.password, request.body.boxID);
     if (success) {
         request.session.username = request.body.username
-        // response.sendFile(path.join(__dirname, '/views', 'app.html'));
-        response.redirect("/app"); // use redirect to go from modal to app page
+        request.session.boxID = request.body.boxID
+        response.redirect("/app") // use redirect to go from modal to app page
     } else {
-        response.sendFile(path.join(__dirname, '/views', 'welcome.html'));
+        response.sendFile(path.join(__dirname, '/views', 'welcome.html'))
     }
 })
 
@@ -100,12 +102,12 @@ app.get('/app', checkIfLoggedIn, (req, res) => {
 
 //user is in /app and wants data
 app.get ('/priorReadings', async (request, response)=>{
-    response.json({dataEntries: await Data.getDataFromDB()})
+    response.json({dataEntries: await Data.getDataFromDB(request.session.boxID)})
 })
 
 //user is in /app and wants FIRST data point
 app.get ('/mostRecentReading', async (request, response)=>{
-    response.json({dataEntriesOne: await Data.getOneDataFromDB()})
+    response.json({dataEntriesOne: await Data.getOneDataFromDB(request.session.boxID)})
 })
 
 //user wants card images

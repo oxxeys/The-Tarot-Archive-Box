@@ -1,53 +1,71 @@
-:root{
-/* set up variables to control animation with */
+:root {
+  /* set up variables to control animation with */
 
 }
 
 @keyframes animateBackground {
-    0%   { background-position: 0% 50%;}
-    20%  { background-position: 100% 100%; }
-    60%  { background-position: 50% 0%; }
-    100% { background-position: 0% 50%; } 
+  0% {
+    background-position: 0% 50%;
+  }
+
+  20% {
+    background-position: 100% 100%;
+  }
+
+  60% {
+    background-position: 50% 0%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+
 }
 
 @keyframes fadeIn {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
-.hideOverflow{
+.hideOverflow {
   overflow: hidden;
 }
 
-.backgroundStyle{
-    min-height: 400vh;
-    background: 
-        radial-gradient(800px 600px at 60% 40%,rgba(159, 118, 130, 0.8) 0%, transparent 70%), 
-        linear-gradient(144deg,rgba(159, 118, 130, 0.9) 0%,rgba(96, 88, 113, 0.9) 50%, rgba(96, 88, 113, 0.9) 60%, rgba(159, 118, 130, 0.9) 100%),
-        radial-gradient(ellipse at 30% 70%,rgba(96, 88, 113, 0.8) 0%, rgba(159, 118, 130, 0.1) 50%, transparent 80%),
-        rgb(85, 77, 100)
-    ;
-    background-size: 150% 150%;
-    animation: animateBackground 60s ease-in-out infinite;
-    color: aliceblue;
+.backgroundStyle {
+  min-height: 400vh;
+  background:
+    radial-gradient(800px 600px at 60% 40%, rgba(159, 118, 130, 0.8) 0%, transparent 70%),
+    linear-gradient(144deg, rgba(159, 118, 130, 0.9) 0%, rgba(96, 88, 113, 0.9) 50%, rgba(96, 88, 113, 0.9) 60%, rgba(159, 118, 130, 0.9) 100%),
+    radial-gradient(ellipse at 30% 70%, rgba(96, 88, 113, 0.8) 0%, rgba(159, 118, 130, 0.1) 50%, transparent 80%),
+    rgb(85, 77, 100);
+  background-size: 150% 150%;
+  animation: animateBackground 60s ease-in-out infinite, fadeIn 1s ease-in;
+  color: aliceblue;
 }
 
-.fadeIn{
-    opacity: 1;
-    animation: fadeIn 1s ease-in;
+.fadeIn {
+  animation: fadeIn 1s ease-in;
 }
 
 
 /* My own classes - in place of bootstrap not having them! */
 .min-vh-75 {
-    min-height: 75vh;
+  min-height: 75vh;
 }
+
 .min-vh-50 {
-    min-height: 50vh;
+  min-height: 50vh;
+}
+
+
+/* Deal with modal fade */
+.modal .backgroundStyle {
+  animation: animateBackground 60s ease-in-out infinite;
 }
 
 
@@ -58,9 +76,10 @@
   display: inline-block;
   position: relative;
 }
+
 .loader::after,
 .loader::before {
-  content: '';  
+  content: '';
   box-sizing: border-box;
   width: 100px;
   height: 100px;
@@ -71,6 +90,7 @@
   top: 0;
   animation: animloader 2s linear infinite;
 }
+
 .loader::after {
   animation-delay: 1s;
 }
@@ -80,9 +100,9 @@
     transform: scale(0);
     opacity: 1;
   }
+
   100% {
     transform: scale(1);
     opacity: 0;
   }
 }
-    

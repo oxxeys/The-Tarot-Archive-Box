@@ -7,19 +7,23 @@ const userSchema = new Schema({
     password: String,
     boxID: String,
 })
-
+const newBoxSchema = new Schema({
+    username: String,
+    boxID: String,
+})
 
 const userData = model("users", userSchema)
+const newBox = model("currentboxes", newBoxSchema)
 
 //return bool if user is there
 async function checkUser(username, password){
  
-
     let found = null
     found = await userData.findOne({username:username}).exec()
 
-    if(found){
-        return found.password==password // checks password - if it is same then it will return true
+    //checks password - if it is same then it will return true
+    if(found && found.password==password){
+        return found
     } else{
         return false
     }
@@ -42,6 +46,13 @@ async function addNewUser(username, password, boxID){
             boxID: boxID
         }
         await userData.create(newUserData)
+
+        // add box to currentBoxes
+        let newBoxData = {
+            username: username,
+            boxID: boxID
+        }
+        await newBox.create(newBoxData)
         return true
     }
 }
