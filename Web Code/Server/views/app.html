@@ -2,221 +2,369 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mystic Reader</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/style.css" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="/logo.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mystic Reader</title>
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/app.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="/logo.ico">
 </head>
 
 <body class="backgroundStyle  ">
-    <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-100">
-        <h1>The Tarot Archive Box</h1>
-        <h2>Welcome Back</h2>
-        <br>
-        <br>
-        <hr class="w-75" />
-        <br>
-        <br>
-        <p>Scroll to explore!</p>
+
+  <button type="button" class="btn btn-mysticBox position-absolute top-0 end-0 m-3" data-bs-toggle="modal"
+    data-bs-target="#howToRead">How to do a reading</button>
+  <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-100"
+    style="margin-bottom: 25vh;">
+    <br>
+    <br>
+    <h1 style="text-decoration: underline;">The Tarot Archive Box</h1>
+    <h2>Welcome Back</h2>
+    <br>
+    <br>
+    <hr class="w-75 border-2 border-light" />
+    <br>
+    <br>
+    <br>
+    <p>Scroll to explore your previous reads!</p>
+  </div>
+
+  <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-75"
+    style="margin-bottom: 25vh;">
+    <h3 class="m3 p3" style="padding-bottom: 20px;">Most Recent Reading</h3>
+    <ul id="recent-reading" class="d-flex flex-wrap justify-content-center gap-3 p-0"></ul>
+    <button type="button" class="btn btn-mysticBox" data-bs-toggle="modal" data-bs-target="#CurrentReadingModal">Reflect
+      on this reading</button>
+  </div>
+
+  <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-50">
+    <h3>More Readings</h3>
+    <div id="more-readings"></div>
+  </div>
+
+
+
+  <!-- Modal for how to do readings -->
+  <div class="modal fade" style="overflow: hidden;" id="howToRead" tabindex="-1" aria-labelledby="howToReadLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content ">
+        <div class="modal-body backgroundStyle">
+          <div class="d-flex flex-column align-items-center justify-content-center text-center min-vh-100">
+            <div class="d-flex flex-column">
+              <div style="max-width: 500px; width: 100%;" class="align-self-center">
+                <h2 class="title">How to use the tarot box</h2>
+                <div class="mb-3">
+                  <p>There are many diffrent types of readings that you perform with tarot cards. While thissite is set
+                    up
+                    to teach users how to perform 5 main readings, you can perform others and use this page as a
+                    logbook.
+                  </p>
+                  <p>To begin, hover over the type of reading you would like to do from the list below, and place that many
+                    cards on the box. Make sure to them ordered, left to right!</p>
+                </div>
+              </div>
+
+              <div class="container mt-5 mb-3 pb-3">
+                <div class="row g-5 justify-content-center">
+                  <div class="col-auto">
+                    <div class="reading-card">
+                      <h3>Daily Reading</h3>
+                      <h4><small style="color: aliceblue; opacity: 0.8;">1 card</small></h4>
+                      <p>This is a great read to do every day. The individual card gives you guidance in response to a
+                        question about the day ahead.</p>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <div class="reading-card">
+                      <h3> Situation / Challenge</h3>
+                      <h4><small style="color: aliceblue; opacity: 0.8;">2 card</small></h4>
+                      <p>This is a quick and easy spread to anwser dilemmas. One card represents the situation and the
+                        other
+                        the challenge / obstacle.</p>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <div class="reading-card">
+                      <h3>Past / Present / Future</h3>
+                      <h4><small style="color: aliceblue; opacity: 0.8;">3 card</small></h4>
+                      <p>A very common spread, it gives insight on a situation/question with each card relating to the
+                        past,
+                        present and future.</p>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <div class="reading-card">
+                      <h3>Decision Making</h3>
+                      <h4><small style="color: aliceblue; opacity: 0.8;">4 card</small></h4>
+                      <p>A spread good for when you are stuck at a crossroads and you want guidance from the cards. This
+                        spread will help you weigh up your options.</p>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <div class="reading-card">
+                      <h3>5 Card Cross</h3>
+                      <h4><small style="color: aliceblue; opacity: 0.8;">5 card</small></h4>
+                      <p>This spread is great for general guidance on an issue. It will help explore the problem and
+                        expose
+                        potential hidden unknowns.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-mysticBox" data-bs-dismiss="modal" style="width: 20%;min-width: 80px; align-self: center;">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-75">
-        <h3>Most Recent Reading</h3>
-        <ul id="recent-reading" class="d-flex flex-wrap justify-content-center gap-3 p-0"></ul>
+  <!-- Most Recent Reading Modal -->
+  <div class="modal fade" id="CurrentReadingModal" tabindex="-1" aria-labelledby="CurrentReadingModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content ">
+        <div class="modal-body backgroundStyle">
+          <div class="d-flex flex-column align-items-center justify-content-center text-center min-vh-100">
+            <div style="max-width: 90vh; width: 90vw;" class="p-4">
+
+              <h2>Your Most Recent Reading!</h2>
+              <h3 id="typeOfReading"></h3>
+              <p></p>
+              <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-75">
+                <ul id="modal-recent-reading" class="d-flex flex-wrap justify-content-center gap-3 p-0">
+                </ul>
+              </div>
+
+
+
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-50">
-        <h3>More Readings</h3>
-        <div id="more-readings"></div>
-    </div>
+  <script>
+    const recentReading = document.getElementById('recent-reading')
+    const modalRecentReading = document.getElementById('modal-recent-reading')
+    const typeOfReading = document.getElementById('typeOfReading')
+    const moreReadings = document.getElementById('more-readings')
 
-    <script>
-        const recentReading = document.getElementById('recent-reading')
-        const moreReadings = document.getElementById('more-readings')
-
-        fetch('/priorReadings')
-            .then(response => response.json())
-            .then(loadData)
+    fetch('/priorReadings')
+      .then(response => response.json())
+      .then(loadData)
 
 
-        async function callAPIforCardData(ID) {
-            console.log(ID)
-            const response = await fetch(`https://tarotapi.dev/api/v1/cards/${ID}`)
+    async function callAPIforCardData(ID) {
+      console.log(ID)
+      const response = await fetch(`https://tarotapi.dev/api/v1/cards/${ID}`)
 
-            const data = await response.json();
-            console.log(data)
-            return data
+      const data = await response.json();
+      console.log(data)
+      return data
+    }
+
+    function calculateCard(ID, stringCardToFind) {
+      if (ID === 1) {
+        stringCardToFind += "ac"
+      }
+      else if (ID === 11) {
+        stringCardToFind += "pa"
+      }
+      else if (ID === 12) {
+        stringCardToFind += "kn"
+      }
+      else if (ID === 13) {
+        stringCardToFind += "qu"
+      }
+      else if (ID === 14) {
+        stringCardToFind += "ki"
+      }
+      else if (ID > 10 && ID != 1) {
+        stringCardToFind += "0"
+      }
+      if (ID >= 2 && ID <= 10) {
+
+        stringCardToFind += ID.toString().padStart(2, "0")
+      }
+      return stringCardToFind
+    }
+
+
+
+    fetch('/mostRecentReading')
+      .then(response => response.json())
+      .then(loadNewest)
+
+    function loadNewest(data) {
+      //set up const to hold array
+      const entry = data.dataEntriesOne
+
+      if (!entry) {
+        console.log("No cards")
+        let text = document.createElement('p')
+        text.innerText = "No cards! Do a reading with a box!"
+        text.className = "p-2 text-center fs-4 text-decoration-underline"
+        recentReading.appendChild(text)
+        return
+      }
+
+      const card = entry.data[0]
+      let cardCount = 0
+
+      entry.data.forEach(async (card) => {
+        if (card === 0) {
+          //if its empty, should return a missing space!
+          return
+        }
+        cardCount += 1
+        // used to test if the card is the right art!
+        // let li = document.createElement('li')
+        // li.innerText = card
+        // recentReading.appendChild(li)
+
+        let img = document.createElement("img")
+        img.src = `/image/${card}`
+        img.height = 120
+        img.className = "m-4"
+
+
+        // API call - if statments to decide which call to make based on the card 
+        let ID = 0
+        let stringCardToFind = ""
+        if (card >= 1 && card <= 22) {
+          ID = card - 1
+          stringCardToFind += "ar"
+          stringCardToFind += ID.toString().padStart(2, "0")
+          // console.log(ID)
+        }
+        else if (card >= 23 && card <= 36) {
+          stringCardToFind += "wa"
+          ID = card - 22
+          stringCardToFind = calculateCard(ID, stringCardToFind)
+
+          //console.log(ID + " : " + stringCardToFind)
+        }
+        else if (card >= 37 && card <= 50) {
+          stringCardToFind += "cu"
+          ID = card - 36
+          stringCardToFind = calculateCard(ID, stringCardToFind)
+
+          //console.log(ID + " : " + stringCardToFind)
+        }
+        else if (card >= 51 && card <= 64) {
+          stringCardToFind += "sw"
+          ID = card - 50
+          stringCardToFind = calculateCard(ID, stringCardToFind)
+
+          //console.log(ID + " : " + stringCardToFind)
+        }
+        else if (card >= 65 && card <= 78) {
+          stringCardToFind += "pe"
+          ID = card - 64
+          stringCardToFind = calculateCard(ID, stringCardToFind)
+
+          //console.log(ID + " : " + stringCardToFind)
         }
 
-        function calculateCard(ID, stringCardToFind) {
-            if (ID === 1) {
-                stringCardToFind += "ac"
-            }
-            else if (ID === 11) {
-                stringCardToFind += "pa"
-            }
-            else if (ID === 12) {
-                stringCardToFind += "kn"
-            }
-            else if (ID === 13) {
-                stringCardToFind += "qu"
-            }
-            else if (ID === 14) {
-                stringCardToFind += "ki"
-            }
-            else if (ID > 10 && ID != 1) {
-                stringCardToFind += "0"
-            }
-            if (ID >= 2 && ID <= 10) {
+        let cardData = await callAPIforCardData(stringCardToFind)
+        let cardText = document.createElement('p')
+        cardText.innerText = cardData.card.meaning_up
 
-                stringCardToFind += ID.toString().padStart(2, "0")
-            }
-            return stringCardToFind
-        }
-
-
-        fetch('/mostRecentReading')
-            .then(response => response.json())
-            .then(loadNewest)
-
-        function loadNewest(data) {
-            //set up const to hold array
-            const entry = data.dataEntriesOne
-
-            if(!entry){
-                console.log("No cards")
-                let text = document.createElement('p')
-
-                text.innerText = "No cards! Do a reading with a box!"
-                text.className = "p-2 text-center fs-4 text-decoration-underline"
-                recentReading.appendChild(text)
-                
-                return
-            }
-
-            const card = entry.data[0]
-            
-
-            entry.data.forEach(async (card) => {
-
-
-                if (card === 0) {
-                    //if its empty, should return a missing space!
-                    return
-                }
-
-                // let li = document.createElement('li')
-                // li.innerText = card
-                // recentReading.appendChild(li)
-
-                let img = document.createElement("img")
-                img.src = `/image/${card}`
-                img.height = 120
-                // img.className = "m-4"
-
-
-                // API call - if statments to decide which call to make based on the card 
-                let ID = 0
-                let stringCardToFind = ""
-                if (card >= 1 && card <= 22) {
-                    ID = card - 1
-                    stringCardToFind += "ar"
-                    stringCardToFind += ID.toString().padStart(2, "0")
-                    // console.log(ID)
-                }
-                else if (card >= 23 && card <= 36) {
-                    stringCardToFind += "wa"
-                    ID = card - 22
-                    stringCardToFind = calculateCard(ID, stringCardToFind)
-
-                    //console.log(ID + " : " + stringCardToFind)
-                }
-                else if (card >= 37 && card <= 50) {
-                    stringCardToFind += "cu"
-                    ID = card - 36
-                    stringCardToFind = calculateCard(ID, stringCardToFind)
-
-                    //console.log(ID + " : " + stringCardToFind)
-                }
-                else if (card >= 51 && card <= 64) {
-                    stringCardToFind += "sw"
-                    ID = card - 50
-                    stringCardToFind = calculateCard(ID, stringCardToFind)
-
-                    //console.log(ID + " : " + stringCardToFind)
-                }
-                else if (card >= 65 && card <= 78) {
-                    stringCardToFind += "pe"
-                    ID = card - 64
-                    stringCardToFind = calculateCard(ID, stringCardToFind)
-
-                    //console.log(ID + " : " + stringCardToFind)
-                }
-
-                let cardData = await callAPIforCardData(stringCardToFind)
-                let cardText = document.createElement('p')
-                cardText.innerText = cardData.card.meaning_up
-
-                let cardContainer = document.createElement(`div`)
-                cardContainer.className = "p-2 text-center"
-                cardContainer.style.width = "15rem"
-
-
-                cardContainer.appendChild(img)
-                cardContainer.appendChild(cardText)
+        let cardContainer = document.createElement(`div`)
+        cardContainer.className = "p-2 text-center"
 
 
 
-                recentReading.appendChild(cardContainer)
-            })
-
-
-        }
-
-        function loadData(data) {
-            //data.dataEntries[0].data
-            // console.log(data)
-            //data.dataEntries[0].data[0]
-
-
-            
-            data.dataEntries.forEach(entry => {
-                
-
-                //Check if entry > 0, if so, find the picture and load it in
-                //if below zero, break 
-
-                const entryRow = document.createElement("div")
-                entryRow.className = "d-flex flex-wrap gap-3 justify-content-center m-4"
-
-                //set up const to hold array
-                entry.data.forEach(card => {
-
-                    if (card === 0) {
-                        //if its empty, should return a missing space!
-                        return
-                    }
-
-                    // let li = document.createElement('li')
-                    // li.innerText = `${entry.data[0]}`
-                    // moreReadings.appendChild(li)
-
-                    let img = document.createElement("img")
-                    img.src = `/image/${card}`
-                    img.height = 120
-
-                    entryRow.appendChild(img)
-                })
-                moreReadings.appendChild(entryRow)
-            })
-
-        }
 
 
 
-    </script>
+
+        cardContainer.appendChild(img)
+        cardContainer.appendChild(cardText)
+        let copy = cardContainer.cloneNode(true)
+        cardContainer.style.width = "15rem"
+
+
+        recentReading.appendChild(cardContainer)
+
+
+
+
+        modalRecentReading.appendChild(copy)
+      })
+      let cardCountTitle = document.createElement('h3')
+      let cardCountTitleText
+      if (cardCount === 0) {
+        cardCountTitleText = "You don't seem to have any cards!"
+      }
+      else if (cardCount === 1) {
+        cardCountTitleText = "Daily Reading"
+      }
+      else if (cardCount === 2) {
+        cardCountTitleText = "Situation/Challenge"
+      }
+      else if (cardCount === 3) {
+        cardCountTitleText = "Past / Present / Future"
+      }
+      else if (cardCount === 4) {
+        cardCountTitleText = "Daily Reading"
+      }
+      else if (cardCount === 5) {
+        cardCountTitleText = "5 Card Cross"
+      }
+      cardCountTitle.innerText = cardCountTitleText
+      typeOfReading.appendChild(cardCountTitle)
+    }
+
+
+    function loadData(data) {
+      //data.dataEntries[0].data
+      // console.log(data)
+      //data.dataEntries[0].data[0]
+
+
+
+      data.dataEntries.forEach(entry => {
+
+
+        //Check if entry > 0, if so, find the picture and load it in
+        //if below zero, break 
+
+        const entryRow = document.createElement("div")
+        entryRow.className = "d-flex flex-wrap gap-3 justify-content-center m-4"
+
+        //set up const to hold array
+        entry.data.forEach(card => {
+
+          if (card === 0) {
+            //if its empty, should return a missing space!
+            return
+          }
+
+          // let li = document.createElement('li')
+          // li.innerText = `${entry.data[0]}`
+          // moreReadings.appendChild(li)
+
+          let img = document.createElement("img")
+          img.src = `/image/${card}`
+          img.height = 120
+
+          entryRow.appendChild(img)
+        })
+        moreReadings.appendChild(entryRow)
+      })
+
+    }
+
+
+
+  </script>
+  <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

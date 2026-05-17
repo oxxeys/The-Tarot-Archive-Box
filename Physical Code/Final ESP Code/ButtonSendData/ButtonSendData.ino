@@ -12,12 +12,12 @@
 // #define PN532_SS 5
 Adafruit_PN532 nfc[5] = {
   Adafruit_PN532(5),
-  Adafruit_PN532(33),
+  Adafruit_PN532(32),
   Adafruit_PN532(27),
-  Adafruit_PN532(14),
+  Adafruit_PN532(13),
   Adafruit_PN532(16)
 };
-int pins[5] = { 5, 33, 27, 14, 16 };
+int pins[5] = { 5, 32, 27, 13, 16 };
 
 //setup dns server
 DNSServer dnsServer;
@@ -160,7 +160,7 @@ void sendEvent() {
     http.setTimeout(5000);
 
     //JSON data to be sent
-    String json = "{\"box_id\": \"Billy's Box!\", \"card_id\": [";
+    String json = "{\"box_id\": \"box006!\", \"card_id\": [";
     for (int i = 0; i < 5; i++) {
       json += String(cardToSend[i]);
       //need to add a comma at the end
@@ -192,13 +192,13 @@ void sendEvent() {
   }
 }
 
-//function to clean up SPI
-void resetSPI() {
-  SPI.end();
-  delay(5);
-  SPI.begin(18, 19, 23);
-  delay(5);
-}
+// //function to clean up SPI
+// void resetSPI() {
+//   SPI.end();
+//   delay(5);
+//   SPI.begin(18, 19, 23);
+//   delay(5);
+// }
 
 void selectReader(int i) {
   // disable all
@@ -220,26 +220,27 @@ void ReadData(int readerIndex) {
 
   //reset cardToSend data
   cardToSend[readerIndex] = "0";
-  resetSPI();
-  selectReader(readerIndex);
+  // resetSPI();
+  //selectReader(readerIndex);
   // delay(50);
 
-  // nfc[readerIndex].begin();
+  nfc[readerIndex].SAMConfig();
+  
 
-  delay(50);
+  delay(20);
 
   Serial.print("Reading reader ");
   Serial.println(readerIndex);
 
   //Detect Card
-  success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 500);
+  success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 1000);
    Serial.println("Done reading!");
 
   if (!success) {
     Serial.print("Reader ");
     Serial.print(readerIndex);
     Serial.println("failed. Trying again:  ");
-    success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 500);
+    success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 1500);
   }
 
   delay(50);
@@ -387,4 +388,5 @@ void loop() {
   }
 
   lastState = currentState;
+  Serial.println(lastState);
 }

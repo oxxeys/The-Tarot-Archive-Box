@@ -1,7 +1,4 @@
-:root {
-  /* set up variables to control animation with */
 
-}
 
 @keyframes animateBackground {
   0% {
@@ -62,6 +59,9 @@
   min-height: 50vh;
 }
 
+.min-vh-100{
+  min-height: 200vh;
+}
 
 /* Deal with modal fade */
 .modal .backgroundStyle {
