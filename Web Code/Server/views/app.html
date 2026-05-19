@@ -200,7 +200,7 @@
       .then(response => response.json())
       .then(loadNewest)
 
-    function loadNewest(data) {
+    async function loadNewest(data) {
       //set up const to hold array
       const entry = data.dataEntriesOne
 
@@ -216,10 +216,10 @@
       const card = entry.data[0]
       let cardCount = 0
 
-      entry.data.forEach(async (card) => {
+      for (const card of entry.data) {
         if (card === 0) {
           //if its empty, should return a missing space!
-          return
+          continue
         }
         cardCount += 1
         // used to test if the card is the right art!
@@ -278,12 +278,6 @@
         let cardContainer = document.createElement(`div`)
         cardContainer.className = "p-2 text-center"
 
-
-
-
-
-
-
         cardContainer.appendChild(img)
         cardContainer.appendChild(cardText)
         let copy = cardContainer.cloneNode(true)
@@ -296,7 +290,7 @@
 
 
         modalRecentReading.appendChild(copy)
-      })
+      }
       let cardCountTitle = document.createElement('h3')
       let cardCountTitleText
       if (cardCount === 0) {

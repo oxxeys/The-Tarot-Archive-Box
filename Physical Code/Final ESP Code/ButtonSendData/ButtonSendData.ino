@@ -29,6 +29,7 @@ Preferences preferences;
 
 const int buttonPin = 21;
 bool shouldRestart = false;
+int led = 33;
 
 //array that stores card data
 String cardToSend[5] = { "0", "0", "0", "0", "0" };
@@ -160,7 +161,7 @@ void sendEvent() {
     http.setTimeout(5000);
 
     //JSON data to be sent
-    String json = "{\"box_id\": \"box006!\", \"card_id\": [";
+    String json = "{\"box_id\": \"box006\", \"card_id\": [";
     for (int i = 0; i < 5; i++) {
       json += String(cardToSend[i]);
       //need to add a comma at the end
@@ -184,6 +185,13 @@ void sendEvent() {
 
       Serial.println("Response 2: ");
       Serial.println(httpResponseCode);
+    } 
+
+    if (httpResponseCode = 200){
+      digitalWrite(led, HIGH);
+      delay(6000);
+      digitalWrite(led, LOW);
+      delay(1000);
     }
 
     http.end();
@@ -237,10 +245,17 @@ void ReadData(int readerIndex) {
    Serial.println("Done reading!");
 
   if (!success) {
-    Serial.print("Reader ");
-    Serial.print(readerIndex);
-    Serial.println("failed. Trying again:  ");
-    success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 1500);
+    for(int i = 1; i < 5; i++){
+      Serial.print("Reader ");
+      Serial.print(readerIndex);
+      Serial.println(" failed. This is read ");
+      Serial.print(i);
+      Serial.println(".Trying again:  ");
+      success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 1000);
+      if(success){
+        break;
+      }
+    }
   }
 
   delay(50);
@@ -319,6 +334,7 @@ void ReadData(int readerIndex) {
 void setup() {
   Serial.begin(115200);
   pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(led, OUTPUT);
 
   //setup nfc reader
   SPI.begin(18, 19, 23);
@@ -388,5 +404,5 @@ void loop() {
   }
 
   lastState = currentState;
-  Serial.println(lastState);
+  //Serial.println(lastState);
 }
