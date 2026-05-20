@@ -39,8 +39,10 @@
   </div>
 
   <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-50">
-    <h3>More Readings</h3>
-    <div id="more-readings"></div>
+    <h3 class="m3 p3" style="padding-bottom: 20px;">Older Readings</h3>
+    <div id="more-readings" class="d-flex flex-wrap justify-content-center flex-column gap-3 p-0"></div>
+    <!-- <button type="button" class="btn btn-mysticBox" data-bs-toggle="modal" data-bs-target="#OlderReadingModal">Reflect
+      on this reading</button> -->
   </div>
 
 
@@ -61,7 +63,8 @@
                     to teach users how to perform 5 main readings, you can perform others and use this page as a
                     logbook.
                   </p>
-                  <p>To begin, hover over the type of reading you would like to do from the list below, and place that many
+                  <p>To begin, hover over the type of reading you would like to do from the list below, and place that
+                    many
                     cards on the box. Make sure to them ordered, left to right!</p>
                 </div>
               </div>
@@ -113,7 +116,8 @@
                   </div>
                 </div>
               </div>
-              <button type="button" class="btn btn-secondary btn-mysticBox" data-bs-dismiss="modal" style="width: 20%;min-width: 80px; align-self: center;">Close</button>
+              <button type="button" class="btn btn-secondary btn-mysticBox" data-bs-dismiss="modal"
+                style="width: 20%;min-width: 80px; align-self: center;">Close</button>
             </div>
           </div>
         </div>
@@ -148,9 +152,34 @@
     </div>
   </div>
 
+  <!-- Dynamic Modal! -->
+  <div class="modal fade" id="OlderReadingModal" tabindex="-1" aria-labelledby="OlderReadingModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content ">
+        <div class="modal-body backgroundStyle">
+          <div class="d-flex flex-column align-items-center justify-content-center text-center min-vh-100">
+            <div style="max-width: 90vh; width: 90vw;" class="p-4">
+              <h2>Older Reading!</h2>
+              <h3 id="typeOfReading"></h3>
+              <p></p>
+              <div class="container d-flex text-center flex-column justify-content-center align-items-center min-vh-75">
+                <ul id="modal-old-reading" class="d-flex flex-wrap justify-content-center gap-3 p-0">
+                </ul>
+              </div>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const recentReading = document.getElementById('recent-reading')
     const modalRecentReading = document.getElementById('modal-recent-reading')
+    const modalOldReadingUL = document.getElementById('modal-old-reading')
+    const olderReadingModal = document.getElementById('OlderReadingModal')
     const typeOfReading = document.getElementById('typeOfReading')
     const moreReadings = document.getElementById('more-readings')
 
@@ -193,8 +222,6 @@
       }
       return stringCardToFind
     }
-
-
 
     fetch('/mostRecentReading')
       .then(response => response.json())
@@ -281,15 +308,17 @@
         cardContainer.appendChild(img)
         cardContainer.appendChild(cardText)
         let copy = cardContainer.cloneNode(true)
+        modalRecentReading.appendChild(copy)
         cardContainer.style.width = "15rem"
 
-
+        cardText.innerText = cardData.card.name
+        cardContainer.appendChild(cardText)
         recentReading.appendChild(cardContainer)
 
 
 
 
-        modalRecentReading.appendChild(copy)
+
       }
       let cardCountTitle = document.createElement('h3')
       let cardCountTitleText
@@ -317,20 +346,14 @@
 
 
     function loadData(data) {
-      //data.dataEntries[0].data
-      // console.log(data)
-      //data.dataEntries[0].data[0]
-
-
 
       data.dataEntries.forEach(entry => {
 
 
-        //Check if entry > 0, if so, find the picture and load it in
-        //if below zero, break 
 
         const entryRow = document.createElement("div")
-        entryRow.className = "d-flex flex-wrap gap-3 justify-content-center m-4"
+        entryRow.className = "d-flex flex-wrap gap-3 justify-content-center m-4 entryRow p-3"
+
 
         //set up const to hold array
         entry.data.forEach(card => {
@@ -347,8 +370,8 @@
           let img = document.createElement("img")
           img.src = `/image/${card}`
           img.height = 120
-
           entryRow.appendChild(img)
+          
         })
         moreReadings.appendChild(entryRow)
       })
