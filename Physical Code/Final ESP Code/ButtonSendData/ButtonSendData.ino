@@ -140,6 +140,14 @@ void connectToWiFi() {
 
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("\nConnected!");
+      digitalWrite(led, HIGH);
+      delay(200);
+      digitalWrite(led, LOW);
+      delay(200);
+      digitalWrite(led, HIGH);
+      delay(200);
+      digitalWrite(led, LOW);
+      delay(200);
     Serial.print("IP: ");
     Serial.println(WiFi.localIP());
   } else {
@@ -187,11 +195,21 @@ void sendEvent() {
       Serial.println(httpResponseCode);
     }
 
-    if (httpResponseCode = 200) {
+    if (httpResponseCode = 200) {      
+      for(int i = 0; i < 5; i++){
+        if(cardToSend[i] != "0")
+        digitalWrite(led, HIGH);
+        delay(100);
+        digitalWrite(led, LOW);
+        delay(100);
+        
+      }
+      delay(2000);
       digitalWrite(led, HIGH);
       delay(6000);
       digitalWrite(led, LOW);
       delay(1000);
+
     }
 
     http.end();
