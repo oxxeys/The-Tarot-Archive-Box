@@ -185,9 +185,9 @@ void sendEvent() {
 
       Serial.println("Response 2: ");
       Serial.println(httpResponseCode);
-    } 
+    }
 
-    if (httpResponseCode = 200){
+    if (httpResponseCode = 200) {
       digitalWrite(led, HIGH);
       delay(6000);
       digitalWrite(led, LOW);
@@ -233,7 +233,7 @@ void ReadData(int readerIndex) {
   // delay(50);
 
   nfc[readerIndex].SAMConfig();
-  
+
 
   delay(20);
 
@@ -242,17 +242,17 @@ void ReadData(int readerIndex) {
 
   //Detect Card
   success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 1000);
-   Serial.println("Done reading!");
+  Serial.println("Done reading!");
 
   if (!success) {
-    for(int i = 1; i < 5; i++){
+    for (int i = 1; i < 5; i++) {
       Serial.print("Reader ");
       Serial.print(readerIndex);
       Serial.println(" failed. This is read ");
       Serial.print(i);
       Serial.println(".Trying again:  ");
       success = nfc[readerIndex].readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, 1000);
-      if(success){
+      if (success) {
         break;
       }
     }

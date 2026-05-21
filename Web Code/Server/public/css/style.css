@@ -69,6 +69,30 @@
 }
 
 
+/* scrollbar styling */
+/* * {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+} */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(20, 20, 35, 0.09);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(252, 221, 149, 0.7);
+  border-radius: 5px;
+  border: 2px solid transparent;
+}
+::-webkit-scrollbar-thumb:hover {
+
+  background: rgba(252, 221, 149, 0.9);
+}
+
+
+
+
 /* used a loader from https://cssloaders.github.io/ - this is hopefully a placeholder as I want to make my own! */
 .loader {
   width: 100px;
