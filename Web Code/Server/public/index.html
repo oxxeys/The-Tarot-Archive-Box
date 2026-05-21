@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Mystic Reader</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/style.css" rel="stylesheet"> 
+    <link href="/css/style.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/logo.ico">
 </head>
+
 <body onload="timer()" class="backgroundStyle fadeIn hideOverflow">
     <div class="d-flex justify-content-center align-items-center min-vh-100">
         <div class="loader fadeIn"></div>
     </div>
-    
 
-<script src="/js/bootstrap.bundle.min.js"></script>
-<script>
 
-    function timer(){
-        timerVar = setTimeout(redirect, 6000)
-        
-    }
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script>
 
-    function redirect(){
-        window.location.replace("welcome");
-    }
+        function timer() {
+            timerVar = setTimeout(redirect, 6000)
 
-</script>
+        }
+
+        function redirect() {
+            window.location.replace("welcome");
+        }
+
+    </script>
 </body>
+
 </html>

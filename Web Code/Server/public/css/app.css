@@ -1,9 +1,7 @@
 .btn-mysticBox {
-  background: linear-gradient(
-    144deg,
-    rgba(159, 118, 130, 0.8) 0%,
-    rgba(158, 118, 130, 0.8) 100%
-  );
+  background: linear-gradient(144deg,
+      rgba(159, 118, 130, 0.8) 0%,
+      rgba(158, 118, 130, 0.8) 100%);
   color: white;
 }
 
@@ -87,6 +85,6 @@
   opacity: 1;
 }
 
-.entryRow{
+.entryRow {
   gap: 2rem;
 }
